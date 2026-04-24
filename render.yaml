@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: json-api-uz
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build && npm run migrate
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: json-api-uz-db
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+databases:
+  - name: json-api-uz-db
+    plan: free
+    databaseName: baas_platform
+    user: baas
